@@ -18,7 +18,9 @@ https://www.reddit.com/r/Proxmox/comments/tgojp1/removing_proxmox_subscription_n
 ## Disable auto boot
 https://forum.proxmox.com/threads/is-there-a-way-to-disable-the-automatic-start-of-vms-before-proxmox-boots.83636/
 
-
+    vi /etc/pve/qemu-server/VMID.conf
+    or
+    vi /etc/pve/qemu-server/VMID.conf
 
 # Opnsense
 
@@ -52,7 +54,12 @@ https://www.ichiayi.com/tech/alpine_docker
     apk add curl
     apk add docker docker-cli-compose
 
-# install adguard home
+## install ollema
+
+    curl -fsSL https://ollama.com/install.sh | sh
+    ollama run deepseek-r1:671b
+
+## install adguard home
 
 https://github.com/AdguardTeam/AdGuardHome#getting-started
 
@@ -64,8 +71,82 @@ https://github.com/AdguardTeam/AdGuardHome#getting-started
 
 https://upsangel.com/openwrt/how-to-install-openwrt-on-proxmox/
 
-## one line install
+## Install Method
 
+### one line install
+
+    bash -c "$(wget -qLO - https://github.com/tteck/Proxmox/raw/main/vm/openwrt.sh)"
+
+### Containers
+
+Youtube: https://www.youtube.com/watch?v=3mPbrunpjpk
+
+a. Images:
+    https://images.linuxcontainers.org/images
+
+
+    1. copy the [rootfs.tar.xz](https://youtu.be/3mPbrunpjpk?si=UI_H6Qz94A3rK6Y6&t=164)
+    2. goback to shell
+        pct create 107 ./rootfs.tar.xz --unprivileged 1 --ostype unmanaged --hostname openwrt --net0 name=eth0 --net1 name=eth1 --storage app-data
+
+    3. vi /etc/pve/lxc/10x.conf
+        lxc.cgroup2.devices.allow: c 10:200 rwm
+        lxc.mount.entry: /dev/net dev/net none bind,create=dir
+    
+    4. Update Interface
+
+    5. Reboot
+
+    6. install OpenVPN OpenVPN-luci
+
+    7. setup OpenVPN
+
+## for my setup
+
+    Virtual Machine ID: 103
+    Using Hostname: openwrt
+    Allocated Cores: 2
+    Allocated RAM: 256
+    Using WAN Bridge: vmbr1
+    Using LAN Bridge: vmbr2
+    Using LAN IP ADDRESS: 192.168.1.1
+    Using LAN NETMASK: 255.255.255.0
+    Using WAN MAC Address: [MAC1]
+    Using LAN MAC Address: [MAC2]
+    Using WAN Vlan: Default
+    Using LAN Vlan: 999
+    Using Interface MTU Size: Default
+    Start VM when completed: yes
+
+# Ollama
+
+    sudo systemctl stop ollama.service
+    sudo systemctl status ollama.service
+## Install Ollama
+
+    curl -fsSL https://ollama.com/install.sh | sh
+
+    ollama pull llama2
+    ollama server
+    ollama 
+
+## Install webui
+
+    git clone https://github.com/ollama-webui/ollama-webui
+    cd ollama-webui
+    docker compose up -d
+
+## when there is error error-saving-credentials-error-storing-credentials-err-exit-status-1-out
+
+    cd $HOME/.docker/ && mv config.json config.json.bak && rm config.json
+
+
+
+
+## Install using docker
+
+    docker run -d --name ollama -p 11434:11434 -v ollama_storage:/root/.ollama \
+  ollama/ollama:latest
 
 # pFsense
 

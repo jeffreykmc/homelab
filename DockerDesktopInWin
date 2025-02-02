@@ -1,0 +1,45 @@
+# Homelab in Win10
+
+
+# Download Docker Desktop
+
+    https://www.docker.com/products/docker-desktop/
+
+# Use Administrator to Run Docker-Desktop    
+
+    docker login 
+    or 
+    use Administrr to run Docker Desktop
+
+# Pull WebUI
+https://docs.openwebui.com/getting-started/quick-start
+
+    docker run -d -p 3000:8080 -v open-webui:/app/backend/data --name open-webui ghcr.io/open-webui/open-webui:main
+
+
+    
+
+# Troble shooting
+
+
+## ERROR: error during connect: in the default daemon configuration on Windows,
+
+### With Powershell:
+
+    Open Powershell as administrator
+    Launch command: & 'C:\Program Files\Docker\Docker\DockerCli.exe' -SwitchDaemon
+
+### OR, with cmd:
+
+    Open cmd as administrator
+    Launch command: "C:\Program Files\Docker\Docker\DockerCli.exe" -SwitchDaemon
+
+
+
+## ERROR: Can't proceed to login
+https://stackoverflow.com/questions/40459280/docker-cannot-start-on-windows
+
+    Open cmd as administrotro
+    docker login
+
+    
